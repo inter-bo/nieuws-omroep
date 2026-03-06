@@ -18,8 +18,8 @@ const settingsPersistConfig = {
 export const store = configureStore({
   reducer: {
     news: newsReducer,
-    settings: persistReducer(settingsPersistConfig, settingsReducer),
-    favoriteSources: persistReducer(favoriteSourcesPersistConfig, favoriteSourcesReducer),
+    settings: persistReducer(settingsPersistConfig, settingsReducer) as unknown as typeof settingsReducer,
+    favoriteSources: persistReducer(favoriteSourcesPersistConfig, favoriteSourcesReducer) as unknown as typeof favoriteSourcesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -42,7 +42,7 @@ export function SettingsList() {
           <Text style={styles.rowLabel}>Donkere modus</Text>
           <Switch
             value={darkMode}
-            onValueChange={() => dispatch(toggleDarkMode())}
+            onValueChange={() => { dispatch(toggleDarkMode()); }}
             trackColor={{ false: theme.border, true: theme.secondary }}
             thumbColor={theme.textLight}
           />
@@ -68,7 +68,7 @@ export function SettingsList() {
               </View>
               <Switch
                 value={isCategoryEnabled(cat.id)}
-                onValueChange={() => dispatch(toggleCategory(cat.id))}
+                onValueChange={() => { dispatch(toggleCategory(cat.id)); }}
                 trackColor={{ false: theme.border, true: theme.secondary }}
                 thumbColor={theme.textLight}
               />
@@ -80,7 +80,7 @@ export function SettingsList() {
                   <Text style={styles.feedName}>{feed.name}</Text>
                   <Switch
                     value={isFeedEnabled(feed.id)}
-                    onValueChange={() => dispatch(toggleFeed(feed.id))}
+                    onValueChange={() => { dispatch(toggleFeed(feed.id)); }}
                     trackColor={{ false: theme.border, true: theme.secondary }}
                     thumbColor={theme.textLight}
                   />

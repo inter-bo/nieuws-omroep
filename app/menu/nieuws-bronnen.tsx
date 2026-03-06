@@ -79,7 +79,7 @@ export default function NieuwsBronnen() {
                     </View>
                     <Switch
                       value={isFeedEnabled(feed.id)}
-                      onValueChange={() => dispatch(toggleFeed(feed.id))}
+                      onValueChange={() => { dispatch(toggleFeed(feed.id)); }}
                       trackColor={{ false: theme.border, true: '#38a3a5' }}
                       thumbColor="#fff"
                     />
