@@ -1,22 +1,57 @@
+import { useMemo } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'expo-router';
 import { RootState } from '@/store';
 import { ArticleCard } from './ArticleCard';
-import Colors from '@/constants/Colors';
+import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors';
+import { defaultCategories } from '@/constants/defaultFeeds';
+import { NewsArticle } from '@/types/news';
+
+// Build feedId → feedName lookup from defaultCategories
+const feedIdToName: Record<string, string> = {};
+for (const category of defaultCategories) {
+  for (const feed of category.feeds) {
+    feedIdToName[feed.id] = feed.name;
+  }
+}
 
 export function FavoritesList() {
   const router = useRouter();
-  const favorites = useSelector((state: RootState) =>
-    Object.values(state.favorites.articles)
-  );
+  const theme = useTheme();
+  const styles = useMemo(() => makeStyles(theme), [theme]);
 
-  if (favorites.length === 0) {
+  const favoriteSourceIds = useSelector((state: RootState) => state.favoriteSources.favoriteSourceIds);
+  const allArticles = useSelector((state: RootState) => state.news.articles);
+
+  const filteredArticles = useMemo<NewsArticle[]>(() => {
+    if (favoriteSourceIds.length === 0) return [];
+    const favoriteNames = new Set(favoriteSourceIds.map((id) => feedIdToName[id]).filter(Boolean));
+    return Object.values(allArticles)
+      .flat()
+      .filter((article) => favoriteNames.has(article.source))
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  }, [favoriteSourceIds, allArticles]);
+
+  if (favoriteSourceIds.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text style={styles.emptyTitle}>Geen favorieten</Text>
+        <Text style={styles.emptyTitle}>Geen bronnen geselecteerd</Text>
         <Text style={styles.emptyText}>
-          Tik het hartje op een artikel om het hier op te slaan
+          Selecteer bronnen via het menu → Favorieten Beheer
+        </Text>
+      </View>
+    );
+  }
+
+  if (filteredArticles.length === 0) {
+    return (
+      <View style={styles.empty}>
+        <Text style={styles.emptyTitle}>Nog geen artikelen</Text>
+        <Text style={styles.emptyText}>
+          De geselecteerde bronnen hebben nog geen artikelen geladen.
+          Ga naar de nieuwsfeed om ze te laden.
         </Text>
       </View>
     );
@@ -25,7 +60,7 @@ export function FavoritesList() {
   return (
     <FlatList
       style={styles.container}
-      data={favorites}
+      data={filteredArticles}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <ArticleCard
@@ -38,32 +73,33 @@ export function FavoritesList() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  list: {
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
-  empty: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
-    backgroundColor: Colors.background,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.5)',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-});
+function makeStyles(c: typeof Colors.dark) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    list: {
+      paddingBottom: 20,
+    },
+    empty: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 32,
+      backgroundColor: c.background,
+    },
+    emptyTitle: {
+      fontSize: 18,
+      fontWeight: '700',
+      color: c.textPrimary,
+      marginBottom: 8,
+    },
+    emptyText: {
+      fontSize: 14,
+      color: c.textMuted,
+      textAlign: 'center',
+      lineHeight: 20,
+    },
+  });
+}

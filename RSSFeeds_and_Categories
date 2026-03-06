@@ -1,0 +1,60 @@
+.
+├── Drenthe
+│   ├── https://www.rtvdrenthe.nl/rss/index.xml
+│   │   └── name: RTV Drenthe
+│   └── color: #ae2012
+├── Flevoland
+│   ├── https://www.omroepflevoland.nl/RSS
+│   │   └── name: Omroep Flevoland
+│   └── color: #0ABAB5
+├── Friesland
+│   ├── https://www.omropfryslan.nl/rss/nieuws.xml
+│   │   └── name: Omrop Fryslan
+│   ├── https://frieschdagblad.nl/api/feed/rss
+│   │   └── name: Friesch Dagblad
+│   ├── https://lc.nl/api/feed/rss
+│   │   └── name: Leeuwarder Courant
+│   └── color: #0055a4
+├── Groningen
+│   ├── https://www.rtvnoord.nl/rss/index.xml
+│   │   └── name: RTV Noord
+        https://dvhn.nl/api/feed/rss
+│   └── color: #008e5a
+├── Gelderland
+│   ├── https://www.gld.nl/rss/index.xml
+│   │   └── name: Omroep GLD
+│   └── color: #BFA100
+├── Limburg
+│   ├── https://www.l1nieuws.nl/rss/index.xml
+│   │   └── name: Gelderland
+│   └── color: #0ABAB5
+├── Noord-Brabant
+│   ├── https://www.omroepbrabant.nl/rss
+│   │   └── name: Omroep Brabant
+│   ├── https://www.ed.nl/home/rss.xml
+│   │   └── name: Eindhovens Dagblad
+│   └── color: #dd0000
+├── Noord-Holland
+│   ├── https://rss.at5.nl/rss
+│   │   └── name: AT5
+│   ├── https://www.haarlemupdates.nl/feed/
+│   │   └── name: Haarlem Updates
+│   └── color: #00964B
+├── Overijssel
+│   ├── https://www.oost.nl/rss/index.xml
+│   │   └── name: OOST.nl
+│   └── color: #96004B
+├── Utrecht
+│   ├── https://www.rtvutrecht.nl/rss/nieuws.xml
+│   │   └── name: RTV Utrecht
+│   └── color: #96004B
+├── Zuid-Holland
+│   ├── https://www.omroepwest.nl/rss/index.xml
+│   │   └── name: Omroep West
+│   ├── https://www.lokaleomroepkrimpen.nl/rel4/rssfeed.asp
+│   │   └── name: LOK
+│   └── color: #C403FF
+└── Zeeland
+    ├── https://www.omroepzeeland.nl/rss/index
+    │   └── name: Omroep Zeeland
+    └── color: #00BAFF

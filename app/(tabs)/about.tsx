@@ -1,17 +1,22 @@
-import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
-import Colors from '@/constants/Colors';
+import { useMemo } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors';
 
 export default function AboutScreen() {
+  const theme = useTheme();
+  const styles = useMemo(() => makeStyles(theme), [theme]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
           <Text style={styles.title}>Over Nieuws Omroep</Text>
-          
+
           <View style={styles.section}>
             <Text style={styles.text}>
-              Nieuws Omroep is dé app voor al het regionale nieuws uit Nederland. 
+              Nieuws Omroep is dé app voor al het regionale nieuws uit Nederland.
               Wij brengen je het laatste nieuws van alle regionale omroepen op één plek samen.
             </Text>
           </View>
@@ -19,7 +24,7 @@ export default function AboutScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Onze Missie</Text>
             <Text style={styles.text}>
-              Onze missie is om regionale journalistiek toegankelijker te maken en 
+              Onze missie is om regionale journalistiek toegankelijker te maken en
               mensen te verbinden met het nieuws uit hun regio.
             </Text>
           </View>
@@ -33,7 +38,6 @@ export default function AboutScreen() {
               <Text style={styles.featureItem}>• Persoonlijke nieuwsfeed</Text>
               <Text style={styles.featureItem}>• Favoriete artikelen opslaan</Text>
               <Text style={styles.featureItem}>• Delen van nieuwsartikelen</Text>
-              <Text style={styles.featureItem}>• Offline lezen</Text>
             </View>
           </View>
 
@@ -53,57 +57,55 @@ export default function AboutScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#38a3a5',
-    marginBottom: 12,
-  },
-  text: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    lineHeight: 24,
-    marginBottom: 8,
-  },
-  featureList: {
-    marginTop: 8,
-  },
-  featureItem: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    lineHeight: 28,
-  },
-  link: {
-    color: '#38a3a5',
-    textDecorationLine: 'underline',
-  },
-  footer: {
-    marginTop: 32,
-    alignItems: 'center',
-  },
-  version: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-}); 
+function makeStyles(c: typeof Colors.dark) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    content: {
+      padding: 20,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: c.textPrimary,
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+    section: {
+      marginBottom: 24,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: '#38a3a5',
+      marginBottom: 12,
+    },
+    text: {
+      fontSize: 16,
+      color: c.textPrimary,
+      lineHeight: 24,
+      marginBottom: 8,
+    },
+    featureList: {
+      marginTop: 8,
+    },
+    featureItem: {
+      fontSize: 16,
+      color: c.textPrimary,
+      lineHeight: 28,
+    },
+    footer: {
+      marginTop: 32,
+      alignItems: 'center',
+    },
+    version: {
+      fontSize: 14,
+      color: c.textMuted,
+    },
+  });
+}

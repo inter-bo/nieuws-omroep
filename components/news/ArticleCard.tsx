@@ -1,37 +1,29 @@
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { memo, useCallback, useMemo } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '@/hooks/useTheme';
 import { NewsArticle } from '@/types/news';
-import { toggleFavorite } from '@/store/slices/favoritesSlice';
-import { RootState } from '@/store';
-import Colors from '@/constants/Colors';
+import { Colors } from '@/constants/Colors';
 
 const placeholder = require('@/assets/images/news-placeholder.jpg');
 
 interface Props {
   article: NewsArticle;
-  onPress: () => void;
+  onPress: (article: NewsArticle) => void;
 }
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+function getProvinceColor(category: string): string {
+  const key = category.toUpperCase().replace(/ /g, '-') as keyof typeof Colors.provinces;
+  return Colors.provinces[key] ?? Colors.secondary;
 }
 
-export function ArticleCard({ article, onPress }: Props) {
-  const dispatch = useDispatch();
-  const isFavorite = useSelector(
-    (state: RootState) => !!state.favorites.articles[article.id]
-  );
+export const ArticleCard = memo(function ArticleCard({ article, onPress }: Props) {
+  const theme = useTheme();
+  const styles = useMemo(() => makeStyles(theme), [theme]);
+  const handlePress = useCallback(() => onPress(article), [onPress, article]);
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.75}>
+    <TouchableOpacity onPress={handlePress} style={styles.container} activeOpacity={0.75}>
       <Image
         source={article.imageUrl || placeholder}
         placeholder={placeholder}
@@ -41,79 +33,64 @@ export function ArticleCard({ article, onPress }: Props) {
       />
       <View style={styles.body}>
         <View style={styles.metaRow}>
-          <Text style={styles.source}>{article.source}</Text>
-          <Text style={styles.date}>{formatDate(article.publishedAt)}</Text>
+          <View style={[styles.badge, { backgroundColor: getProvinceColor(article.category) }]}>
+            <Text style={styles.badgeText}>{article.category}</Text>
+          </View>
+          <Text style={styles.source} numberOfLines={1}>{article.source}</Text>
         </View>
-        <Text style={styles.title} numberOfLines={2}>
+        <Text style={styles.title} numberOfLines={3}>
           {article.title}
         </Text>
-        <Text style={styles.description} numberOfLines={2}>
-          {article.description}
-        </Text>
       </View>
-      <Pressable
-        onPress={() => dispatch(toggleFavorite(article))}
-        style={styles.favoriteButton}
-        hitSlop={8}
-        accessibilityLabel={isFavorite ? 'Verwijder uit favorieten' : 'Voeg toe aan favorieten'}
-      >
-        <Ionicons
-          name={isFavorite ? 'heart' : 'heart-outline'}
-          size={22}
-          color={isFavorite ? '#e74c3c' : 'rgba(255,255,255,0.5)'}
-        />
-      </Pressable>
     </TouchableOpacity>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: Colors.backgroundSecondary,
-    borderRadius: 10,
-    marginHorizontal: 12,
-    marginBottom: 10,
-    overflow: 'hidden',
-  },
-  image: {
-    width: 100,
-    height: 90,
-  },
-  body: {
-    flex: 1,
-    padding: 10,
-    gap: 4,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  source: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.6)',
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-  },
-  date: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    lineHeight: 19,
-  },
-  description: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.65)',
-    lineHeight: 17,
-  },
-  favoriteButton: {
-    padding: 10,
-    justifyContent: 'center',
-  },
 });
+
+function makeStyles(c: typeof Colors.dark) {
+  return StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      backgroundColor: 'transparent',
+      marginHorizontal: 0,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: c.border,
+    },
+    image: {
+      width: 120,
+      height: 110,
+    },
+    body: {
+      flex: 1,
+      padding: 10,
+      gap: 6,
+      justifyContent: 'flex-start',
+    },
+    metaRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      flexWrap: 'wrap',
+    },
+    badge: {
+      paddingHorizontal: 7,
+      paddingVertical: 2,
+      borderRadius: 999,
+    },
+    badgeText: {
+      color: '#FFFFFF',
+      fontSize: 10,
+      fontWeight: '700',
+    },
+    source: {
+      fontSize: 11,
+      color: c.textMuted,
+      flexShrink: 1,
+    },
+    title: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: c.textPrimary,
+      lineHeight: 20,
+    },
+  });
+}

@@ -11,7 +11,7 @@ interface SettingsState {
 const initialState: SettingsState = {
   enabledFeeds: {},
   enabledCategories: {},
-  darkMode: false,
+  darkMode: true,
   hasSeenOnboarding: false,
 };
 

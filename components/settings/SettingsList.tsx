@@ -1,14 +1,17 @@
+import { useMemo, useState } from 'react';
 import { View, Text, ScrollView, Switch, StyleSheet, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState, AppDispatch } from '@/store';
 import { toggleFeed, toggleCategory, toggleDarkMode } from '@/store/slices/settingsSlice';
 import { defaultCategories } from '@/constants/defaultFeeds';
-import Colors from '@/constants/Colors';
+import { useTheme } from '@/hooks/useTheme';
+import { Colors } from '@/constants/Colors';
 
 export function SettingsList() {
   const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const styles = useMemo(() => makeStyles(theme), [theme]);
   const { enabledFeeds, enabledCategories, darkMode } = useSelector(
     (state: RootState) => state.settings
   );
@@ -40,8 +43,8 @@ export function SettingsList() {
           <Switch
             value={darkMode}
             onValueChange={() => dispatch(toggleDarkMode())}
-            trackColor={{ false: Colors.border, true: Colors.secondary }}
-            thumbColor="#FFFFFF"
+            trackColor={{ false: theme.border, true: theme.secondary }}
+            thumbColor={theme.textLight}
           />
         </View>
       </View>
@@ -59,15 +62,15 @@ export function SettingsList() {
                 <Ionicons
                   name={expanded.has(cat.id) ? 'chevron-down' : 'chevron-forward'}
                   size={16}
-                  color="rgba(255,255,255,0.5)"
+                  color={theme.textMuted}
                 />
                 <Text style={styles.categoryName}>{cat.name}</Text>
               </View>
               <Switch
                 value={isCategoryEnabled(cat.id)}
                 onValueChange={() => dispatch(toggleCategory(cat.id))}
-                trackColor={{ false: Colors.border, true: Colors.secondary }}
-                thumbColor="#FFFFFF"
+                trackColor={{ false: theme.border, true: theme.secondary }}
+                thumbColor={theme.textLight}
               />
             </TouchableOpacity>
 
@@ -78,8 +81,8 @@ export function SettingsList() {
                   <Switch
                     value={isFeedEnabled(feed.id)}
                     onValueChange={() => dispatch(toggleFeed(feed.id))}
-                    trackColor={{ false: Colors.border, true: Colors.secondary }}
-                    thumbColor="#FFFFFF"
+                    trackColor={{ false: theme.border, true: theme.secondary }}
+                    thumbColor={theme.textLight}
                   />
                 </View>
               ))}
@@ -90,72 +93,74 @@ export function SettingsList() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  content: {
-    paddingBottom: 40,
-  },
-  section: {
-    marginTop: 24,
-    marginHorizontal: 16,
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: 'rgba(255,255,255,0.5)',
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: 8,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundSecondary,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  rowLabel: {
-    fontSize: 15,
-    color: '#FFFFFF',
-  },
-  categoryRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.backgroundSecondary,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    marginBottom: 4,
-  },
-  categoryLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  categoryName: {
-    fontSize: 15,
-    color: '#FFFFFF',
-    fontWeight: '500',
-  },
-  feedRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.primary,
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    marginBottom: 2,
-    marginLeft: 16,
-  },
-  feedName: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
-  },
-});
+function makeStyles(c: typeof Colors.dark) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: c.background,
+    },
+    content: {
+      paddingBottom: 40,
+    },
+    section: {
+      marginTop: 24,
+      marginHorizontal: 16,
+    },
+    sectionTitle: {
+      fontSize: 12,
+      fontWeight: '700',
+      color: c.textMuted,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+      marginBottom: 8,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: c.backgroundSecondary,
+      borderRadius: 10,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+    },
+    rowLabel: {
+      fontSize: 15,
+      color: c.textPrimary,
+    },
+    categoryRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: c.backgroundSecondary,
+      borderRadius: 10,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      marginBottom: 4,
+    },
+    categoryLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    categoryName: {
+      fontSize: 15,
+      color: c.textPrimary,
+      fontWeight: '500',
+    },
+    feedRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: c.primary,
+      borderRadius: 8,
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+      marginBottom: 2,
+      marginLeft: 16,
+    },
+    feedName: {
+      fontSize: 14,
+      color: c.textSecondary,
+    },
+  });
+}

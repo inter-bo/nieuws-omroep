@@ -108,8 +108,7 @@ function extractImageUrl(item: RssItem, feedUrl: string): string | undefined {
     }
   }
 
-  // Rest of the existing logic...
-  return 'https://via.placeholder.com/300x200?text=No+Image';
+  return undefined;
 }
 
 function decodeHtmlEntities(text: string): string {
