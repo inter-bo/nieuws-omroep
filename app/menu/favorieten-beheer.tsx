@@ -32,7 +32,7 @@ export default function FavorietenBeheer() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
           <Ionicons name="arrow-back" size={24} color={theme.textLight} />
         </TouchableOpacity>
-        <Text style={styles.title}>Favorieten Beheer</Text>
+        <Text style={styles.title}>Favorieten</Text>
         <View style={{ width: 24 }} />
       </View>
       <FlatList

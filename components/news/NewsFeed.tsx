@@ -332,7 +332,7 @@ export function NewsFeed() {
                   <Ionicons name="star-outline" size={48} color={theme.textMuted} />
                   <Text style={styles.emptyText}>Geen bronnen geselecteerd</Text>
                   <Text style={styles.emptySubtext}>
-                    Selecteer bronnen via het menu → Favorieten Beheer
+                    Selecteer bronnen via het menu → Favorieten
                   </Text>
                 </View>
               ) : isLoading && pageArticles.length === 0 ? (

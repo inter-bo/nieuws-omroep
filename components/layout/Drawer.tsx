@@ -85,7 +85,7 @@ export function Drawer() {
     },
     {
       icon: 'star-outline',
-      label: 'Favorieten Beheer',
+      label: 'Favorieten',
       onPress: () => navigate('/menu/favorieten-beheer'),
     },
     {

@@ -39,7 +39,7 @@ export function FavoritesList() {
       <View style={styles.empty}>
         <Text style={styles.emptyTitle}>Geen bronnen geselecteerd</Text>
         <Text style={styles.emptyText}>
-          Selecteer bronnen via het menu → Favorieten Beheer
+          Selecteer bronnen via het menu → Favorieten
         </Text>
       </View>
     );
