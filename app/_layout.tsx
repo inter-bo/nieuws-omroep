@@ -1,13 +1,15 @@
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack } from 'expo-router';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/store';
+import { RootState } from '@/store';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Header } from '@/components/ui/Header';
 import { Drawer } from '@/components/layout/Drawer';
 import { DrawerProvider } from '@/context/DrawerContext';
+import { OnboardingScreen } from '@/components/onboarding/OnboardingScreen';
 import { View, ScrollView, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -34,6 +36,14 @@ class ErrorBoundary extends React.Component<
 
 SplashScreen.preventAutoHideAsync();
 
+function AppGate({ children }: { children: React.ReactNode }) {
+  const hasSeenOnboarding = useSelector(
+    (state: RootState) => state.settings.hasSeenOnboarding
+  );
+  if (!hasSeenOnboarding) return <OnboardingScreen />;
+  return <>{children}</>;
+}
+
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -42,25 +52,27 @@ export default function RootLayout() {
           <PersistGate loading={<View style={{ flex: 1 }} />} persistor={persistor} onBeforeLift={() => { SplashScreen.hideAsync(); }}>
             <SafeAreaProvider>
               <DrawerProvider>
-                <Header />
-                <Stack
-                  screenOptions={{
-                    headerShown: false,
-                    animation: 'slide_from_right'
-                  }}
-                >
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="article/[url]"
-                    options={{
-                      animation: 'slide_from_right',
-                      gestureEnabled: true,
-                      gestureDirection: 'horizontal'
+                <AppGate>
+                  <Header />
+                  <Stack
+                    screenOptions={{
+                      headerShown: false,
+                      animation: 'slide_from_right'
                     }}
-                  />
-                  <Stack.Screen name="menu" options={{ headerShown: false }} />
-                </Stack>
-                <Drawer />
+                  >
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    <Stack.Screen
+                      name="article/[url]"
+                      options={{
+                        animation: 'slide_from_right',
+                        gestureEnabled: true,
+                        gestureDirection: 'horizontal'
+                      }}
+                    />
+                    <Stack.Screen name="menu" options={{ headerShown: false }} />
+                  </Stack>
+                  <Drawer />
+                </AppGate>
               </DrawerProvider>
             </SafeAreaProvider>
           </PersistGate>

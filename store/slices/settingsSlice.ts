@@ -42,8 +42,11 @@ const settingsSlice = createSlice({
     setHasSeenOnboarding: (state) => {
       state.hasSeenOnboarding = true;
     },
+    resetOnboarding: (state) => {
+      state.hasSeenOnboarding = false;
+    },
   },
 });
 
-export const { toggleFeed, toggleCategory, toggleDarkMode, setHasSeenOnboarding } = settingsSlice.actions;
+export const { toggleFeed, toggleCategory, toggleDarkMode, setHasSeenOnboarding, resetOnboarding } = settingsSlice.actions;
 export default settingsSlice.reducer; 

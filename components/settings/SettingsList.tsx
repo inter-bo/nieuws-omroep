@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Switch, StyleSheet, TouchableOpacity } from 're
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState, AppDispatch } from '@/store';
-import { toggleFeed, toggleCategory, toggleDarkMode } from '@/store/slices/settingsSlice';
+import { toggleFeed, toggleCategory, toggleDarkMode, resetOnboarding } from '@/store/slices/settingsSlice';
 import { defaultCategories } from '@/constants/defaultFeeds';
 import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors';
@@ -89,6 +89,18 @@ export function SettingsList() {
           </View>
         ))}
       </View>
+      {__DEV__ && (
+        <View style={styles.devSection}>
+          <Text style={styles.sectionTitle}>Developer</Text>
+          <TouchableOpacity
+            style={styles.devRow}
+            onPress={() => { dispatch(resetOnboarding()); }}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.devLabel}>Reset onboarding</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -161,6 +173,20 @@ function makeStyles(c: typeof Colors.dark) {
     feedName: {
       fontSize: 14,
       color: c.textSecondary,
+    },
+    devSection: {
+      marginTop: 24,
+      marginHorizontal: 16,
+    },
+    devRow: {
+      backgroundColor: c.backgroundSecondary,
+      borderRadius: 10,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+    },
+    devLabel: {
+      fontSize: 15,
+      color: c.error,
     },
   });
 }
