@@ -3,6 +3,11 @@ const { getDefaultConfig } = require("@expo/metro-config");
 module.exports = (() => {
   const config = getDefaultConfig(__dirname);
 
+  // @expo/metro-config sets this internally but Metro validation warns about it
+  if (config.watcher) {
+    delete config.watcher.unstable_workerThreads;
+  }
+
   const { transformer, resolver } = config;
 
   config.transformer = {
