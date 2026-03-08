@@ -44,7 +44,7 @@ describe('settingsSlice', () => {
   });
 
   describe('toggleCategory', () => {
-    // 'friesland' has feeds: omropfryslan, frieschdagblad, lc
+    // 'friesland' has feeds: omropfryslan, lc
     const friesland = defaultCategories.find(c => c.id === 'friesland')!;
     const feedIds = friesland.feeds.map(f => f.id);
 

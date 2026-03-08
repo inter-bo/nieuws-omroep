@@ -48,12 +48,6 @@ export const defaultCategories: NewsCategory[] = [
         enabled: true
       },
       {
-        id: 'frieschdagblad',
-        name: 'Friesch Dagblad',
-        url: 'https://frieschdagblad.nl/api/feed/rss',
-        enabled: true
-      },
-      {
         id: 'lc',
         name: 'Leeuwarder Courant',
         url: 'https://lc.nl/api/feed/rss',

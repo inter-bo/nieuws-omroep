@@ -28,8 +28,9 @@ import { Colors } from '@/constants/Colors';
 import { defaultCategories } from '@/constants/defaultFeeds';
 
 function parseDateMs(dateStr: string): number {
+  if (!dateStr) return -1;
   const ms = Date.parse(dateStr);
-  return isNaN(ms) ? 0 : ms;
+  return isNaN(ms) ? -1 : ms;
 }
 
 const feedIdToName: Record<string, string> = {};

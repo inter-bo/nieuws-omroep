@@ -264,7 +264,7 @@ function parseRssFeed(xmlText: string, feed: RssFeed): NewsArticle[] {
         imageUrl: extractImageUrl(item, feed.url),
         category: feed.name,
         source: feed.name,
-        publishedAt: item.pubDate ?? item['dc:date'] ?? new Date().toISOString(),
+        publishedAt: item.pubDate ?? item['dc:date'] ?? '',
       }));
   } catch (error) {
     logError(`Error parsing RSS feed: ${feed.url}`, error);

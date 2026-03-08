@@ -31,7 +31,11 @@ export function FavoritesList() {
     return Object.values(allArticles)
       .flat()
       .filter((article) => favoriteNames.has(article.source))
-      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      .sort((a, b) => {
+        const aMs = a.publishedAt ? (Date.parse(a.publishedAt) || -1) : -1;
+        const bMs = b.publishedAt ? (Date.parse(b.publishedAt) || -1) : -1;
+        return bMs - aMs;
+      });
   }, [favoriteSourceIds, allArticles]);
 
   if (favoriteSourceIds.length === 0) {
