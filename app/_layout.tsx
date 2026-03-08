@@ -8,7 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Header } from '@/components/ui/Header';
 import { Drawer } from '@/components/layout/Drawer';
 import { DrawerProvider } from '@/context/DrawerContext';
-import { useEffect } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -36,15 +35,11 @@ class ErrorBoundary extends React.Component<
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ErrorBoundary>
         <Provider store={store}>
-          <PersistGate loading={<View style={{ flex: 1 }} />} persistor={persistor}>
+          <PersistGate loading={<View style={{ flex: 1 }} />} persistor={persistor} onBeforeLift={() => { SplashScreen.hideAsync(); }}>
             <SafeAreaProvider>
               <DrawerProvider>
                 <Header />
