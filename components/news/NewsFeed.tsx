@@ -141,9 +141,7 @@ export function NewsFeed() {
       timeoutId = setTimeout(() => {
         if (visibleCategories.length === 0) return;
         // Fetch first category immediately (typically 1 feed, minimal blocking)
-        fetchCategory(visibleCategories[0]).catch((err) =>
-          console.error('[NewsFeed] first category error:', err)
-        );
+        fetchCategory(visibleCategories[0]).catch(() => {});
         // After 1.5s, fetch remaining categories one-by-one with 150ms between each
         restTimeoutId = setTimeout(async () => {
           for (let i = 1; i < visibleCategories.length; i++) {

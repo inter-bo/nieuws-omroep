@@ -16,9 +16,16 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.nieuwsomroep",
+      "supportsTablet": false,
+      "bundleIdentifier": "nl.nieuwsomroep.app",
+      "buildNumber": "1.0.0",
       "splash": {
         "image": "./assets/images/splash.png",
         "tabletImage": "./assets/images/splash.png",
@@ -29,9 +36,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#003366"
+        "backgroundColor": "#FFFFFF"
       },
-      "package": "com.yourcompany.nieuwsomroep",
+      "package": "nl.nieuwsomroep.app",
+      "permissions": ["INTERNET"],
       "splash": {
         "image": "./assets/images/splash.png",
         "resizeMode": "contain",
