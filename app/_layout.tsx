@@ -41,36 +41,36 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <ErrorBoundary>
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <PersistGate loading={<View style={{ flex: 1 }} />} persistor={persistor}>
-          <SafeAreaProvider>
-            <DrawerProvider>
-              <Header />
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'slide_from_right'
-                }}
-              >
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="article/[url]"
-                  options={{
-                    animation: 'slide_from_right',
-                    gestureEnabled: true,
-                    gestureDirection: 'horizontal'
+      <ErrorBoundary>
+        <Provider store={store}>
+          <PersistGate loading={<View style={{ flex: 1 }} />} persistor={persistor}>
+            <SafeAreaProvider>
+              <DrawerProvider>
+                <Header />
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    animation: 'slide_from_right'
                   }}
-                />
-                <Stack.Screen name="menu" options={{ headerShown: false }} />
-              </Stack>
-              <Drawer />
-            </DrawerProvider>
-          </SafeAreaProvider>
-        </PersistGate>
-      </Provider>
+                >
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="article/[url]"
+                    options={{
+                      animation: 'slide_from_right',
+                      gestureEnabled: true,
+                      gestureDirection: 'horizontal'
+                    }}
+                  />
+                  <Stack.Screen name="menu" options={{ headerShown: false }} />
+                </Stack>
+                <Drawer />
+              </DrawerProvider>
+            </SafeAreaProvider>
+          </PersistGate>
+        </Provider>
+      </ErrorBoundary>
     </GestureHandlerRootView>
-    </ErrorBoundary>
   );
 }

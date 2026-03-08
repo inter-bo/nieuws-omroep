@@ -16,8 +16,6 @@ export default function NieuwsBronnen() {
   const theme = useTheme();
   const styles = useMemo(() => makeStyles(theme), [theme]);
   const enabledFeeds = useSelector((state: RootState) => state.settings.enabledFeeds);
-  const allArticles = useSelector((state: RootState) => state.news.articles);
-
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   function toggleCollapse(id: string) {
@@ -26,10 +24,6 @@ export default function NieuwsBronnen() {
 
   function isFeedEnabled(feedId: string) {
     return enabledFeeds[feedId] !== false;
-  }
-
-  function getArticleCount(categoryId: string, feedName: string): number {
-    return (allArticles[categoryId] ?? []).filter((a) => a.source === feedName).length;
   }
 
   function getEnabledCount(categoryId: string) {
@@ -67,15 +61,10 @@ export default function NieuwsBronnen() {
                   color={theme.textMuted}
                 />
               </TouchableOpacity>
-              {!isCollapsed && category.feeds.map((feed) => {
-                const count = getArticleCount(category.id, feed.name);
-                return (
+              {!isCollapsed && category.feeds.map((feed) => (
                   <View key={feed.id} style={styles.feedRow}>
                     <View style={styles.feedInfo}>
                       <Text style={styles.feedName}>{feed.name}</Text>
-                      {count > 0 && (
-                        <Text style={styles.feedCount}>{count} artikelen</Text>
-                      )}
                     </View>
                     <Switch
                       value={isFeedEnabled(feed.id)}
@@ -84,8 +73,7 @@ export default function NieuwsBronnen() {
                       thumbColor="#fff"
                     />
                   </View>
-                );
-              })}
+                ))}
             </View>
           );
         })}
@@ -155,10 +143,6 @@ function makeStyles(c: typeof Colors.dark) {
       color: c.textPrimary,
       fontSize: 14,
       fontWeight: '500',
-    },
-    feedCount: {
-      color: c.textMuted,
-      fontSize: 12,
     },
   });
 }

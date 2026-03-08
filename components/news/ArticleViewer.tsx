@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Share } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 import { Colors } from '@/constants/Colors';
+import Logo from '@/assets/images/logo.svg';
 
 interface Props {
   url: string;
@@ -27,28 +29,36 @@ export function ArticleViewer({ url }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.toolbar}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.toolbarButton}
-          accessibilityLabel="Terug"
-        >
-          <Ionicons name="arrow-back" size={24} color={theme.textLight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleShare}
-          style={styles.toolbarButton}
-          accessibilityLabel="Delen"
-        >
-          <Ionicons name="share-outline" size={24} color={theme.textLight} />
-        </TouchableOpacity>
-      </View>
+      <SafeAreaView edges={['top']} style={styles.toolbarWrapper}>
+        <View style={styles.toolbar}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.toolbarButton}
+            accessibilityLabel="Terug"
+          >
+            <Ionicons name="arrow-back" size={24} color={theme.textLight} />
+          </TouchableOpacity>
+          <View style={styles.logoWrapper}>
+            <Logo width={216} height={58} />
+          </View>
+          <TouchableOpacity
+            onPress={handleShare}
+            style={styles.toolbarButton}
+            accessibilityLabel="Delen"
+          >
+            <Ionicons name="share-outline" size={24} color={theme.textLight} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
 
       <WebView
         source={{ uri: url }}
         style={styles.webview}
         onLoadStart={() => setIsLoading(true)}
         onLoadEnd={() => setIsLoading(false)}
+        // FIX: on iOS, failed WebView navigations fire onError instead of onLoadEnd —
+        // without this, isLoading stays true and the overlay blocks the screen forever
+        onError={() => setIsLoading(false)}
       />
 
       {isLoading && (
@@ -66,16 +76,23 @@ function makeStyles(c: typeof Colors.dark) {
       flex: 1,
       backgroundColor: c.primary,
     },
+    toolbarWrapper: {
+      backgroundColor: c.primary,
+    },
     toolbar: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 8,
-      paddingVertical: 6,
+      paddingVertical: 10,
       backgroundColor: c.primary,
     },
     toolbarButton: {
       padding: 8,
+      width: 40,
+    },
+    logoWrapper: {
+      flex: 1,
+      alignItems: 'center',
     },
     webview: {
       flex: 1,

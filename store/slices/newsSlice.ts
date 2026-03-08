@@ -24,6 +24,14 @@ const newsSlice = createSlice({
       const { categoryId, articles } = action.payload;
       state.articles[categoryId] = articles;
     },
+    removeSourceArticles(state, action: PayloadAction<{ categoryId: string; sourceName: string }>) {
+      const { categoryId, sourceName } = action.payload;
+      if (state.articles[categoryId]) {
+        state.articles[categoryId] = state.articles[categoryId].filter(
+          (a) => a.source !== sourceName
+        );
+      }
+    },
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
@@ -33,5 +41,5 @@ const newsSlice = createSlice({
   },
 });
 
-export const { setArticles, setLoading, setError } = newsSlice.actions;
+export const { setArticles, removeSourceArticles, setLoading, setError } = newsSlice.actions;
 export default newsSlice.reducer; 

@@ -22,37 +22,44 @@ export function Drawer() {
 
   const translateX = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  // FIX: store running animation so it can be stopped on cleanup — prevents native crash
+  // when the component unmounts mid-spring (e.g., rapid navigation away during drawer open)
+  const activeAnimationRef = useRef<Animated.CompositeAnimation | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      Animated.parallel([
-        Animated.spring(translateX, {
-          toValue: 0,
-          damping: 20,
-          stiffness: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(backdropOpacity, {
-          toValue: 0.5,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    } else {
-      Animated.parallel([
-        Animated.spring(translateX, {
-          toValue: -DRAWER_WIDTH,
-          damping: 20,
-          stiffness: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(backdropOpacity, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
+    const anim = isOpen
+      ? Animated.parallel([
+          Animated.spring(translateX, {
+            toValue: 0,
+            damping: 20,
+            stiffness: 200,
+            useNativeDriver: true,
+          }),
+          Animated.timing(backdropOpacity, {
+            toValue: 0.5,
+            duration: 200,
+            useNativeDriver: true,
+          }),
+        ])
+      : Animated.parallel([
+          Animated.spring(translateX, {
+            toValue: -DRAWER_WIDTH,
+            damping: 20,
+            stiffness: 200,
+            useNativeDriver: true,
+          }),
+          Animated.timing(backdropOpacity, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }),
+        ]);
+    activeAnimationRef.current = anim;
+    anim.start();
+    return () => {
+      // FIX: stop any in-flight animation to prevent updating detached native views
+      activeAnimationRef.current?.stop();
+    };
   }, [isOpen]);
 
   function handleRateApp() {

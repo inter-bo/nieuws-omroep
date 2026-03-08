@@ -79,6 +79,31 @@ const feedImageExtractors = {
     }
     return undefined;
   },
+  '112brabant.nl': (item: RssItem): string | undefined => {
+    if (item['content:encoded']) {
+      const wpImageMatch = item['content:encoded'].match(/<img[^>]+src="([^"]+)"/i);
+      if (wpImageMatch?.[1]) return wpImageMatch[1];
+    }
+    return undefined;
+  },
+  'centrumutrecht.nl': (item: RssItem): string | undefined => {
+    if (item['content:encoded']) {
+      const wpImageMatch = item['content:encoded'].match(/<img[^>]+src="([^"]+)"/i);
+      if (wpImageMatch?.[1]) return wpImageMatch[1];
+    }
+    return undefined;
+  },
+  'lokaleomroepzeewolde.nl': (item: RssItem): string | undefined => {
+    if (item.description) {
+      const imgMatch = item.description.match(/<img[^>]+src="([^"]+)"/i);
+      if (imgMatch?.[1]) return imgMatch[1];
+    }
+    return undefined;
+  },
+  'gelrenieuws.nl': (item: RssItem): string | undefined => {
+    if (item.image) return typeof item.image === 'string' ? item.image : item.image.url;
+    return undefined;
+  },
   'omroepflevoland.nl': (item: RssItem): string | undefined => {
     // Flevoland specific image extraction
     if (item.image) return typeof item.image === 'string' ? item.image : item.image.url;
@@ -172,37 +197,17 @@ function logError(message: string, error?: any) {
 }
 
 export async function fetchRssFeed(feed: RssFeed): Promise<NewsArticle[]> {
+  log(`Fetching RSS feed: ${feed.name} (${feed.url})`);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
   try {
-    log(`Fetching RSS feed: ${feed.name} (${feed.url})`);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
     const response = await fetchWithRetry(feed.url, {
       headers: {
         'Accept': 'application/rss+xml, application/xml, text/xml, */*',
         'User-Agent': 'Mozilla/5.0 (compatible; NewsApp/1.0;)'
       },
-      signal: controller.signal // Use AbortController instead of timeout
+      signal: controller.signal
     });
-
-    clearTimeout(timeoutId); // Clear the timeout if fetch succeeds
-
-    if (response.status === 503) {
-      log(`Service unavailable for ${feed.name}, retrying...`);
-      // Wait 1 second and retry once
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const retryResponse = await fetchWithRetry(feed.url, {
-        headers: {
-          'Accept': 'application/rss+xml, application/xml, text/xml, */*',
-          'User-Agent': 'Mozilla/5.0 (compatible; NewsApp/1.0;)'
-        }
-      });
-      if (!retryResponse.ok) {
-        logError(`Failed to fetch ${feed.name} after retry: ${retryResponse.status}`, retryResponse);
-        return [];
-      }
-      return parseRssFeed(await retryResponse.text(), feed);
-    }
 
     if (!response.ok) {
       logError(`HTTP error! status: ${response.status} for ${feed.name}`, response);
@@ -215,6 +220,10 @@ export async function fetchRssFeed(feed: RssFeed): Promise<NewsArticle[]> {
   } catch (error) {
     logError(`Error fetching RSS feed ${feed.url}:`, error);
     return [];
+  } finally {
+    // FIX: always clear the abort timer — previously skipped on thrown errors, leaving
+    // dangling timers that accumulate across many feed fetches on iOS
+    clearTimeout(timeoutId);
   }
 }
 
@@ -228,6 +237,7 @@ function validateRssItem(item: RssItem): item is ValidatedRssItem {
   return (
     typeof item.title === 'string' &&
     typeof item.link === 'string' &&
+    (item.link.startsWith('http://') || item.link.startsWith('https://')) &&
     typeof item.description === 'string'
   );
 }

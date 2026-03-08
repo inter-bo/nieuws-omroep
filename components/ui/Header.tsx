@@ -23,7 +23,7 @@ export function Header() {
           <Ionicons name="menu" size={26} color={theme.textLight} />
         </TouchableOpacity>
         <View style={styles.logoWrapper}>
-          <Logo width={140} height={36} />
+          <Logo width={216} height={58} />
         </View>
         <View style={styles.spacer} />
       </View>

@@ -22,6 +22,18 @@ export const defaultCategories: NewsCategory[] = [
         name: 'Omroep Flevoland',
         url: 'https://www.omroepflevoland.nl/RSS/rss.aspx',
         enabled: true
+      },
+      {
+        id: 'lokaleomroepzeewolde',
+        name: 'Lokale Omroep Zeewolde',
+        url: 'https://www.lokaleomroepzeewolde.nl/?format=feed&type=rss',
+        enabled: true
+      },
+      {
+        id: 'flevopost',
+        name: 'Flevopost',
+        url: 'https://flevopost.nl/api/feed/rss',
+        enabled: true
       }
     ]
   },
@@ -76,6 +88,12 @@ export const defaultCategories: NewsCategory[] = [
         name: 'Omroep GLD',
         url: 'https://www.gld.nl/rss/index.xml',
         enabled: true
+      },
+      {
+        id: 'gelrenieuws',
+        name: 'Gelre Nieuws',
+        url: 'https://www.gelrenieuws.nl/feed',
+        enabled: true
       }
     ]
   },
@@ -87,6 +105,12 @@ export const defaultCategories: NewsCategory[] = [
         id: 'l1',
         name: 'L1',
         url: 'https://www.l1nieuws.nl/rss/index.xml',
+        enabled: true
+      },
+      {
+        id: 'sittardgeleennieuws',
+        name: 'Sittard-Geleen Nieuws',
+        url: 'https://sittard-geleen.nieuws.nl/sitemap/news.xml',
         enabled: true
       }
     ]
@@ -102,9 +126,21 @@ export const defaultCategories: NewsCategory[] = [
         enabled: true
       },
       {
-        id: 'ed',
-        name: 'Eindhovens Dagblad',
-        url: 'https://www.ed.nl/home/rss.xml',
+        id: '112brabant',
+        name: '112 Brabant',
+        url: 'https://112brabant.nl/feed/',
+        enabled: true
+      },
+      {
+        id: '112brabantnieuws',
+        name: '112 Brabant Nieuws',
+        url: 'https://www.112brabantnieuws.nl/rss',
+        enabled: true
+      },
+      {
+        id: 'bredavandaag',
+        name: 'Breda Vandaag',
+        url: 'https://www.bredavandaag.nl/rss',
         enabled: true
       }
     ]
@@ -124,6 +160,24 @@ export const defaultCategories: NewsCategory[] = [
         name: 'Haarlem Updates',
         url: 'https://www.haarlemupdates.nl/feed/',
         enabled: true
+      },
+      {
+        id: 'nhnieuws',
+        name: 'NH Nieuws',
+        url: 'https://rss.nhnieuws.nl/rss',
+        enabled: true
+      },
+      {
+        id: 'provincienh',
+        name: 'Provincie Noord-Holland',
+        url: 'https://www.noord-holland.nl/pnhnieuws',
+        enabled: true
+      },
+      {
+        id: 'noordkop247',
+        name: 'Noordkop 247',
+        url: 'https://noordkop247.nl/feed/',
+        enabled: true
       }
     ]
   },
@@ -136,6 +190,18 @@ export const defaultCategories: NewsCategory[] = [
         name: 'OOST.nl',
         url: 'https://www.oost.nl/rss/index.xml',
         enabled: true
+      },
+      {
+        id: '1twente',
+        name: '1Twente',
+        url: 'https://www.1twente.nl/feed/twente',
+        enabled: true
+      },
+      {
+        id: '1zwolle',
+        name: '1Zwolle',
+        url: 'https://1zwolle.nl/feed',
+        enabled: true
       }
     ]
   },
@@ -147,6 +213,24 @@ export const defaultCategories: NewsCategory[] = [
         id: 'rtvutrecht',
         name: 'RTV Utrecht',
         url: 'https://www.rtvutrecht.nl/rss/nieuws.xml',
+        enabled: true
+      },
+      {
+        id: 'duic',
+        name: 'DUIC',
+        url: 'https://www.duic.nl/rss',
+        enabled: true
+      },
+      {
+        id: 'nieuwsutrecht',
+        name: 'Nieuws Utrecht',
+        url: 'https://utrecht.nieuws.nl/sitemap/news.xml',
+        enabled: true
+      },
+      {
+        id: 'centrumutrecht',
+        name: 'Centrum Utrecht',
+        url: 'https://centrumutrecht.nl/nieuws/feed/',
         enabled: true
       }
     ]
@@ -174,9 +258,9 @@ export const defaultCategories: NewsCategory[] = [
         enabled: true
       },
       {
-        id: 'lokaleomroepkrimpen',
-        name: 'LOK',
-        url: 'https://www.lokaleomroepkrimpen.nl/rel4/rssfeed.asp',
+        id: 'rijnmond',
+        name: 'Rijnmond',
+        url: 'https://www.rijnmond.nl/rss/index.xml',
         enabled: true
       }
     ]

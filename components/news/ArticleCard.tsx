@@ -12,11 +12,6 @@ interface Props {
   onPress: (article: NewsArticle) => void;
 }
 
-function getProvinceColor(category: string): string {
-  const key = category.toUpperCase().replace(/ /g, '-') as keyof typeof Colors.provinces;
-  return Colors.provinces[key] ?? Colors.secondary;
-}
-
 export const ArticleCard = memo(function ArticleCard({ article, onPress }: Props) {
   const theme = useTheme();
   const styles = useMemo(() => makeStyles(theme), [theme]);
@@ -33,10 +28,9 @@ export const ArticleCard = memo(function ArticleCard({ article, onPress }: Props
       />
       <View style={styles.body}>
         <View style={styles.metaRow}>
-          <View style={[styles.badge, { backgroundColor: getProvinceColor(article.category) }]}>
-            <Text style={styles.badgeText}>{article.category}</Text>
+          <View style={styles.sourcePill}>
+            <Text style={styles.sourceText} numberOfLines={1}>{article.source}</Text>
           </View>
-          <Text style={styles.source} numberOfLines={1}>{article.source}</Text>
         </View>
         <Text style={styles.title} numberOfLines={3}>
           {article.title}
@@ -52,12 +46,13 @@ function makeStyles(c: typeof Colors.dark) {
       flexDirection: 'row',
       backgroundColor: 'transparent',
       marginHorizontal: 0,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: c.border,
+      marginBottom: 8,
     },
     image: {
       width: 120,
       height: 110,
+      borderRadius: 16,
+      overflow: 'hidden',
     },
     body: {
       flex: 1,
@@ -71,24 +66,21 @@ function makeStyles(c: typeof Colors.dark) {
       gap: 6,
       flexWrap: 'wrap',
     },
-    badge: {
-      paddingHorizontal: 7,
-      paddingVertical: 2,
-      borderRadius: 999,
+    sourcePill: {
+      backgroundColor: c.backgroundSecondary,
+      borderRadius: 7,
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+      flexShrink: 1,
     },
-    badgeText: {
-      color: '#FFFFFF',
-      fontSize: 10,
-      fontWeight: '700',
-    },
-    source: {
+    sourceText: {
       fontSize: 11,
       color: c.textMuted,
-      flexShrink: 1,
+      fontWeight: '600',
     },
     title: {
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: '800',
       color: c.textPrimary,
       lineHeight: 20,
     },
